@@ -1,76 +1,1414 @@
-<!DOCTYPE html>
+NOTES: ${data.notes || 'Aucune note'}`;
+                
+            } else if (serviceType === 'SCAN DIAGNOSTIQUE') {
+                const scanTypes = Array.from(document.querySelectorAll('input[name="scan-types"]:checked')).map(cb => cb.value);
+                
+                if (scanTypes.length === 0) {
+                    alert('Veuillez sélectionner au moins un type de scan.');
+                    return;
+                }
+                
+                message = `🚗 NOUVELLE DEMANDE - FreinsExpress
+
+SERVICE: ${serviceType}
+
+VÉHICULE:
+• Marque: ${data.marque}
+• Modèle: ${data.modele}
+• Année: ${data.annee}
+• Version: ${data.trim || 'Non spécifiée'}
+
+SCANS DEMANDÉS:
+• ${scanTypes.join(', ')}
+
+CLIENT:
+• Nom: ${data.nom}
+• Téléphone: ${data.telephone}
+• Email: ${data.email || 'Non fourni'}
+• Ville: ${data.ville || 'Non spécifiée'}
+
+NOTES: ${data.notes || 'Aucune note'}`;
+                
+            } else if (serviceType === 'RÉPARATIONS DIVERSES') {
+                if (!data.probleme.trim()) {
+                    alert('Veuillez décrire le problème.');
+                    return;
+                }
+                
+                message = `🚗 NOUVELLE DEMANDE - FreinsExpress
+
+SERVICE: ${serviceType}
+
+VÉHICULE:
+• Marque: ${data.marque}
+• Modèle: ${data.modele}
+• Année: ${data.annee}
+• Version: ${data.trim || 'Non spécifiée'}
+
+PROBLÈME DÉCRIT:
+${data.probleme}
+
+URGENCE: ${data.urgence || 'Normal'}
+
+CLIENT:
+• Nom: ${data.nom}
+• Téléphone: ${data.telephone}
+• Email: ${data.email || 'Non fourni'}
+• Ville: ${data.ville || 'Non spécifiée'}
+
+PHOTOS: ${document.getElementById('file-input-autre').files.length > 0 ? 'Oui (' + document.getElementById('file-input-autre').files.length + ' fichiers)' : 'Aucune'}`;
+            }
+            
+            // Simuler l'envoi
+            alert(`Merci ${data.nom}! Votre demande de ${serviceType.toLowerCase()} a été reçue.\n\nNous vous contacterons au ${data.telephone} dans les plus brefs délais pour confirmer votre rendez-vous.`);
+            
+            console.log('Message généré:', message);
+        }<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="FreinsExpress - Services mécaniques à domicile au Québec.">
-  <title>FreinsExpress - Accueil</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FreinsExpress - Service professionnel de mécanique automobile à domicile. Freins, amortisseurs, vidange, réparations.">
+    <meta name="keywords" content="frein, amortisseur, vidange, mécanique, auto, domicile, Montréal">
+    <title>FreinsExpress - Services Mécaniques à Domicile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            animation: slideInLeft 1s ease-out;
+        }
+        
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            animation: slideInRight 1s ease-out;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            color: #64b5f6;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+        
+        /* Services Section */
+        .services {
+            padding: 4rem 2rem;
+            background: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .service-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            background-color: #f8f9fa;
+        }
+        
+        .service-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: transparent;
+        }
+        
+        .service-content {
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+            margin-top: 2rem;
+        }
+        
+        .price-tag {
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+        
+        /* Page Content */
+        .page-content {
+            display: none;
+            min-height: 60vh;
+        }
+        
+        .page-content.active {
+            display: block;
+        }
+        
+        /* Booking Form Styles */
+        .booking {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+        }
+        
+        .booking-form {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.95);
+            padding: 3rem;
+            border-radius: 20px;
+            color: #333;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            animation: scaleIn 1s ease-out;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
+        }
+        
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .checkbox-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .checkbox-item input {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+        
+        .photo-upload {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .photo-upload:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+        }
+        
+        .photo-upload.dragover {
+            border-color: #667eea;
+            background: #e3f2fd;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        /* Animations */
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: rotate(0deg) translate(-50%, -50%); }
+            50% { transform: rotate(180deg) translate(-50%, -50%); }
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="header">
-      <nav class="nav">
-          <div class="logo">🚗 FreinsExpress</div>
-          <ul class="nav-links">
-              <li><a href="index.html">Accueil</a></li>
-              <li><a href="freins.html">Freins</a></li>
-              <li><a href="huile.html">Huile</a></li>
-              <li><a href="amortisseurs.html">Amortisseurs</a></li>
-              <li><a href="autres.html">Autres</a></li>
-              <li><a href="contact.html">Contact</a></li>
-          </ul>
-      </nav>
-  </header>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">🚗 FreinsExpress</div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('accueil')" class="active">Accueil</a></li>
+                <li><a href="#" onclick="showPage('freins')">Freins</a></li>
+                <li><a href="#" onclick="showPage('amortisseurs')">Amortisseurs</a></li>
+                <li><a href="#" onclick="showPage('vidange')">Vidange</a></li>
+                <li><a href="#" onclick="showPage('scan')">Scan</a></li>
+                <li><a href="#" onclick="showPage('autre')">Autre</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
+    <!-- Page Accueil -->
+    <div id="accueil" class="page-content active">
+        <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
                 <h1>Services Mécaniques à Domicile</h1>
-                <p>Expert en mécanique automobile • Service rapide et professionnel • Directement chez vous au Québec</p>
-                <a class="cta-button" href="freins.html">Nos Services</a>
+                <p>Expert automobile • Service rapide et professionnel • Directement chez vous</p>
             </div>
         </section>
 
+        <!-- Services Section -->
         <section class="services">
             <div class="container">
                 <h2 class="section-title">Nos Services</h2>
                 <div class="services-grid">
-                    <div class="service-card">
-                        <div class="service-image">Photo: Changement de freins</div>
-                        <div class="service-icon">🔧</div>
-                        <h3><a href="freins.html">Changement de Freins</a></h3>
-                        <p>Plaquettes, disques, inspection complète.</p>
-                        <div class="price-tag">À partir de 120$</div>
+                    <div class="service-card" onclick="showPage('freins')">
+                        <div class="service-image" style="background-image: linear-gradient(45deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8)), url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2230%22 fill=%22%23fff%22 opacity=%220.3%22/><circle cx=%2250%22 cy=%2250%22 r=%2220%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%223%22/><rect x=%2245%22 y=%2235%22 width=%2210%22 height=%2230%22 fill=%22%23fff%22 opacity=%220.7%22/></svg>')"></div>
+                        <div class="service-content">
+                            <div class="service-icon">🔧</div>
+                            <h3>Service de Freins</h3>
+                            <p>Remplacement professionnel de vos plaquettes et disques de frein avec pièces de qualité.</p>
+                            <div class="price-tag">À partir de 120$</div>
+                        </div>
                     </div>
-                    <div class="service-card">
-                        <div class="service-image">Photo: Changement d'huile</div>
-                        <div class="service-icon">🛢️</div>
-                        <h3><a href="huile.html">Changement d'Huile</a></h3>
-                        <p>Vidange complète, filtres inclus.</p>
-                        <div class="price-tag">À partir de 80$</div>
+                    
+                    <div class="service-card" onclick="showPage('amortisseurs')">
+                        <div class="service-image" style="background-image: linear-gradient(45deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8)), url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%2245%22 y=%2220%22 width=%2210%22 height=%2260%22 fill=%22%23fff%22 opacity=%220.7%22/><circle cx=%2250%22 cy=%2235%22 r=%228%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%222%22/><path d=%22M35,25 Q50,15 65,25%22 stroke=%22%23fff%22 stroke-width=%223%22 fill=%22none%22/></svg>')"></div>
+                        <div class="service-content">
+                            <div class="service-icon">⚙️</div>
+                            <h3>Amortisseurs</h3>
+                            <p>Remplacement d'amortisseurs avant et arrière pour un meilleur confort de conduite.</p>
+                            <div class="price-tag">À partir de 180$</div>
+                        </div>
                     </div>
-                    <div class="service-card">
-                        <div class="service-image">Photo: Amortisseurs</div>
-                        <div class="service-icon">⚡</div>
-                        <h3><a href="amortisseurs.html">Changement d'Amortisseurs</a></h3>
-                        <p>Avant, arrière ou complet.</p>
-                        <div class="price-tag">À partir de 250$</div>
+                    
+                    <div class="service-card" onclick="showPage('vidange')">
+                        <div class="service-image" style="background-image: linear-gradient(45deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8)), url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><ellipse cx=%2250%22 cy=%2270%22 rx=%2225%22 ry=%228%22 fill=%22%23fff%22 opacity=%220.5%22/><rect x=%2245%22 y=%2230%22 width=%2210%22 height=%2240%22 fill=%22%23fff%22 opacity=%220.7%22/><path d=%22M40,35 Q50,25 60,35%22 stroke=%22%23fff%22 stroke-width=%222%22 fill=%22none%22/></svg>')"></div>
+                        <div class="service-content">
+                            <div class="service-icon">🛢️</div>
+                            <h3>Vidange d'Huile</h3>
+                            <p>Changement d'huile moteur complet avec option filtre à air pour l'entretien optimal.</p>
+                            <div class="price-tag">À partir de 100$</div>
+                        </div>
                     </div>
-                    <div class="service-card">
-                        <div class="service-image">Photo: Réparations diverses</div>
-                        <div class="service-icon">🛠️</div>
-                        <h3><a href="autres.html">Autres Services</a></h3>
-                        <p>Diagnostic, entretien général.</p>
-                        <div class="price-tag">Devis personnalisé</div>
+                    
+                    <div class="service-card" onclick="showPage('scan')">
+                        <div class="service-image" style="background-color: #f8f9fa;"></div>
+                        <div class="service-content">
+                            <div class="service-icon">🔍</div>
+                            <h3>Scan Diagnostique</h3>
+                            <p>Diagnostic électronique complet de votre véhicule pour identifier les codes d'erreur.</p>
+                            <div class="price-tag">À partir de 40$</div>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card" onclick="showPage('autre')">
+                        <div class="service-image" style="background-image: linear-gradient(45deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8)), url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%2230%22 y=%2240%22 width=%2240%22 height=%2220%22 fill=%22none%22 stroke=%22%23fff%22 stroke-width=%223%22/><path d=%22M25,35 L35,45 L25,55%22 stroke=%22%23fff%22 stroke-width=%222%22 fill=%22none%22/><circle cx=%2260%22 cy=%2230%22 r=%223%22 fill=%22%23fff%22/></svg>')"></div>
+                        <div class="service-content">
+                            <div class="service-icon">🛠️</div>
+                            <h3>Réparations Diverses</h3>
+                            <p>Diagnostic et réparations mécaniques diverses. Envoyez-nous vos photos et descriptions.</p>
+                            <div class="price-tag">Devis sur mesure</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-        
-  <!-- Footer -->
-  <footer class="footer">
-      <p>© 2025 FreinsExpress - Tous droits réservés.</p>
-  </footer>
+    </div>
+
+    <!-- Page Freins -->
+    <div id="freins" class="page-content">
+        <section class="booking">
+            <div class="container">
+                <h2 class="section-title">Service de Freins</h2>
+                <form class="booking-form" onsubmit="submitFreinsForm(event)">
+                    <button type="button" class="back-button" onclick="showPage('accueil')">Retour</button>
+                    <h3 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Informations du Véhicule</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="marque-freins">Marque</label>
+                            <select id="marque-freins" name="marque" required onchange="updateModels('freins')">
+                                <option value="">Sélectionner...</option>
+                                <option value="Toyota">Toyota</option>
+                                <option value="Honda">Honda</option>
+                                <option value="Ford">Ford</option>
+                                <option value="Chevrolet">Chevrolet</option>
+                                <option value="Nissan">Nissan</option>
+                                <option value="Hyundai">Hyundai</option>
+                                <option value="Volkswagen">Volkswagen</option>
+                                <option value="BMW">BMW</option>
+                                <option value="Mercedes">Mercedes-Benz</option>
+                                <option value="Audi">Audi</option>
+                                <option value="Mazda">Mazda</option>
+                                <option value="Subaru">Subaru</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="modele-freins">Modèle</label>
+                            <select id="modele-freins" name="modele" required>
+                                <option value="">Choisir marque d'abord</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="annee-freins">Année</label>
+                            <select id="annee-freins" name="annee" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="trim-freins">Version (Trim)</label>
+                            <input type="text" id="trim-freins" name="trim" placeholder="Ex: LX, EX, Sport, Limited...">
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 2rem 0 1rem 0; color: #2c3e50;">Service de Freins Requis</h3>
+                    
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="avant-freins" name="position" value="avant">
+                            <label for="avant-freins">Freins Avant</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="arriere-freins" name="position" value="arriere">
+                            <label for="arriere-freins">Freins Arrière</label>
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="plaquettes-freins" name="composants" value="plaquettes">
+                            <label for="plaquettes-freins">Plaquettes de Frein</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="disques-freins" name="composants" value="disques">
+                            <label for="disques-freins">Disques de Frein</label>
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 2rem 0 1rem 0; color: #2c3e50;">Vos Informations</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nom-freins">Nom Complet *</label>
+                            <input type="text" id="nom-freins" name="nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telephone-freins">Téléphone *</label>
+                            <input type="tel" id="telephone-freins" name="telephone" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email-freins">Email</label>
+                            <input type="email" id="email-freins" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="ville-freins">Ville</label>
+                            <input type="text" id="ville-freins" name="ville" placeholder="Pour estimation déplacement">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes-freins">Notes additionnelles</label>
+                        <textarea id="notes-freins" name="notes" rows="4" placeholder="Décrivez vos symptômes ou demandes particulières..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        📞 Demander un Devis Gratuit
+                    </button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Page Amortisseurs -->
+    <div id="amortisseurs" class="page-content">
+        <section class="booking">
+            <div class="container">
+                <h2 class="section-title">Service d'Amortisseurs</h2>
+                <form class="booking-form" onsubmit="submitAmortisseursForm(event)">
+                    <button type="button" class="back-button" onclick="showPage('accueil')">Retour</button>
+                    <h3 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Informations du Véhicule</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="marque-amortisseurs">Marque</label>
+                            <select id="marque-amortisseurs" name="marque" required onchange="updateModels('amortisseurs')">
+                                <option value="">Sélectionner...</option>
+                                <option value="Toyota">Toyota</option>
+                                <option value="Honda">Honda</option>
+                                <option value="Ford">Ford</option>
+                                <option value="Chevrolet">Chevrolet</option>
+                                <option value="Nissan">Nissan</option>
+                                <option value="Hyundai">Hyundai</option>
+                                <option value="Volkswagen">Volkswagen</option>
+                                <option value="BMW">BMW</option>
+                                <option value="Mercedes">Mercedes-Benz</option>
+                                <option value="Audi">Audi</option>
+                                <option value="Mazda">Mazda</option>
+                                <option value="Subaru">Subaru</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="modele-amortisseurs">Modèle</label>
+                            <select id="modele-amortisseurs" name="modele" required>
+                                <option value="">Choisir marque d'abord</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="annee-amortisseurs">Année</label>
+                            <select id="annee-amortisseurs" name="annee" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="trim-amortisseurs">Version (Trim)</label>
+                            <input type="text" id="trim-amortisseurs" name="trim" placeholder="Ex: LX, EX, Sport, Limited...">
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 2rem 0 1rem 0; color: #2c3e50;">Amortisseurs à Remplacer</h3>
+                    
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="avant-amortisseurs" name="position" value="avant">
+                            <label for="avant-amortisseurs">Amortisseurs Avant</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="arriere-amortisseurs" name="position" value="arriere">
+                            <label for="arriere-amortisseurs">Amortisseurs Arrière</label>
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 2rem 0 1rem 0; color: #2c3e50;">Vos Informations</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nom-amortisseurs">Nom Complet *</label>
+                            <input type="text" id="nom-amortisseurs" name="nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telephone-amortisseurs">Téléphone *</label>
+                            <input type="tel" id="telephone-amortisseurs" name="telephone" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email-amortisseurs">Email</label>
+                            <input type="email" id="email-amortisseurs" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="ville-amortisseurs">Ville</label>
+                            <input type="text" id="ville-amortisseurs" name="ville" placeholder="Pour estimation déplacement">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes-amortisseurs">Notes additionnelles</label>
+                        <textarea id="notes-amortisseurs" name="notes" rows="4" placeholder="Décrivez les symptômes (bruits, vibrations, usure inégale des pneus...)"></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        📞 Demander un Devis Gratuit
+                    </button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Page Vidange -->
+    <div id="vidange" class="page-content">
+        <section class="booking">
+            <div class="container">
+                <h2 class="section-title">Service de Vidange</h2>
+                <form class="booking-form" onsubmit="submitVidangeForm(event)">
+                    <button type="button" class="back-button" onclick="showPage('accueil')">Retour</button>
+                    <h3 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Informations du Véhicule</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="marque-vidange">Marque</label>
+                            <select id="marque-vidange" name="marque" required onchange="updateModels('vidange')">
+                                <option value="">Sélectionner...</option>
+                                <option value="Toyota">Toyota</option>
+                                <option value="Honda">Honda</option>
+                                <option value="Ford">Ford</option>
+                                <option value="Chevrolet">Chevrolet</option>
+                                <option value="Nissan">Nissan</option>
+                                <option value="Hyundai">Hyundai</option>
+                                <option value="Volkswagen">Volkswagen</option>
+                                <option value="BMW">BMW</option>
+                                <option value="Mercedes">Mercedes-Benz</option>
+                                <option value="Audi">Audi</option>
+                                <option value="Mazda">Mazda</option>
+                                <option value="Subaru">Subaru</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="modele-vidange">Modèle</label>
+                            <select id="modele-vidange" name="modele" required>
+                                <option value="">Choisir marque d'abord</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="annee-vidange">Année</label>
+                            <select id="annee-vidange" name="annee" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="trim-vidange">Version (Trim)</label>
+                            <input type="text" id="trim-vidange" name="trim" placeholder="Ex: LX, EX, Sport, Limited...">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="moteur-vidange">Type de moteur (si connu)</label>
+                            <input type="text" id="moteur-vidange" name="moteur" placeholder="Ex: 2.0L, V6, Turbo...">
+                        </div>
+                        <div class="form-group">
+                            <label for="kilometrage-vidange">Kilométrage actuel</label>
+                            <input type="number" id="kilometrage-vidange" name="kilometrage" placeholder="Ex: 45000">
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 2rem 0 1rem 0; color: #2c3e50;">Services Requis</h3>
+                    
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="vidange-huile" name="services" value="vidange" checked>
+                            <label for="vidange-huile">Vidange d'huile moteur</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="filtre-air" name="services" value="filtre-air">
+                            <label for="filtre-air">Changement filtre à air (extra)</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="type-huile">Type d'huile préféré</label>
+                        <select id="type-huile" name="type-huile">
+                            <option value="">Laissez-nous choisir</option>
+                            <option value="conventionnelle">Huile conventionnelle</option>
+                            <option value="synthetique-melange">Mélange synthétique</option>
+                            <option value="synthetique-complete">Huile synthétique complète</option>
+                        </select>
+                    </div>
+
+                    <h3 style="margin: 2rem 0 1rem 0; color: #2c3e50;">Vos Informations</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nom-vidange">Nom Complet *</label>
+                            <input type="text" id="nom-vidange" name="nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telephone-vidange">Téléphone *</label>
+                            <input type="tel" id="telephone-vidange" name="telephone" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email-vidange">Email</label>
+                            <input type="email" id="email-vidange" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="ville-vidange">Ville</label>
+                            <input type="text" id="ville-vidange" name="ville" placeholder="Pour estimation déplacement">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes-vidange">Notes additionnelles</label>
+                        <textarea id="notes-vidange" name="notes" rows="4" placeholder="Date de dernière vidange, préférences particulières..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        📞 Demander un Devis Gratuit
+                    </button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Page Scan -->
+    <div id="scan" class="page-content">
+        <section class="booking">
+            <div class="container">
+                <h2 class="section-title">Scan Diagnostique</h2>
+                <form class="booking-form" onsubmit="submitScanForm(event)">
+                    <button type="button" class="back-button" onclick="showPage('accueil')">Retour</button>
+                    <h3 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Informations du Véhicule</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="marque-scan">Marque</label>
+                            <select id="marque-scan" name="marque" required onchange="updateModels('scan')">
+                                <option value="">Sélectionner...</option>
+                                <option value="Toyota">Toyota</option>
+                                <option value="Honda">Honda</option>
+                                <option value="Ford">Ford</option>
+                                <option value="Chevrolet">Chevrolet</option>
+                                <option value="Nissan">Nissan</option>
+                                <option value="Hyundai">Hyundai</option>
+                                <option value="Volkswagen">Volkswagen</option>
+                                <option value="BMW">BMW</option>
+                                <option value="Mercedes">Mercedes-Benz</option>
+                                <option value="Audi">Audi</option>
+                                <option value="Mazda">Mazda</option>
+                                <option value="Subaru">Subaru</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="modele-scan">Modèle</label>
+                            <select id="modele-scan" name="modele" required>
+                                <option value="">Choisir marque d'abord</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="annee-scan">Année</label>
+                            <select id="annee-scan" name="annee" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="trim-scan">Version (Trim)</label>
+                            <input type="text" id="trim-scan" name="trim" placeholder="Ex: LX, EX, Sport, Limited...">
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 2rem 0 1rem 0; color: #2c3e50;">Types de Scan Requis</h3>
+                    
+                    <div class="scan-options">
+                        <div class="scan-option" onclick="toggleScanOption('check-engine')">
+                            <input type="checkbox" id="check-engine" name="scan-types" value="check-engine">
+                            <div class="scan-option-image" style="background-image: url('./images/check.jpg'); background-size: cover;">
+</div>
+                            </div>
+                            <div class="scan-option-title">Check Engine</div>
+                        </div>
+                        
+                        <div class="scan-option" onclick="toggleScanOption('abs')">
+                            <input type="checkbox" id="abs" name="scan-types" value="abs">
+                            <div class="scan-option-image">
+                                Espace pour photo<br>ABS
+                            </div>
+                            <div class="scan-option-title">ABS</div>
+                        </div>
+                        
+                        <div class="scan-option" onclick="toggleScanOption('airbag')">
+                            <input type="checkbox" id="airbag" name="scan-types" value="airbag">
+                            <div class="scan-option-image">
+                                Espace pour photo<br>Airbag
+                            </div>
+                            <div class="scan-option-title">Airbag</div>
+                        </div>
+                        
+                        <div class="scan-option" onclick="toggleScanOption('transmission')">
+                            <input type="checkbox" id="transmission" name="scan-types" value="transmission">
+                            <div class="scan-option-image">
+                                Espace pour photo<br>Transmission
+                            </div>
+                            <div class="scan-option-title">Transmission</div>
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 2rem 0 1rem 0; color: #2c3e50;">Vos Informations</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nom-scan">Nom Complet *</label>
+                            <input type="text" id="nom-scan" name="nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telephone-scan">Téléphone *</label>
+                            <input type="tel" id="telephone-scan" name="telephone" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email-scan">Email</label>
+                            <input type="email" id="email-scan" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="ville-scan">Ville</label>
+                            <input type="text" id="ville-scan" name="ville" placeholder="Pour estimation déplacement">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes-scan">Notes additionnelles</label>
+                        <textarea id="notes-scan" name="notes" rows="4" placeholder="Décrivez les voyants allumés, codes d'erreur si connus, symptômes..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        📞 Demander un Diagnostic Gratuit
+                    </button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Page Autre -->
+    <div id="autre" class="page-content">
+        <section class="booking">
+            <div class="container">
+                <h2 class="section-title">Réparations Diverses</h2>
+                <form class="booking-form" onsubmit="submitAutreForm(event)">
+                    <button type="button" class="back-button" onclick="showPage('accueil')">Retour</button>
+                    <h3 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">Informations du Véhicule</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="marque-autre">Marque</label>
+                            <select id="marque-autre" name="marque" required onchange="updateModels('autre')">
+                                <option value="">Sélectionner...</option>
+                                <option value="Toyota">Toyota</option>
+                                <option value="Honda">Honda</option>
+                                <option value="Ford">Ford</option>
+                                <option value="Chevrolet">Chevrolet</option>
+                                <option value="Nissan">Nissan</option>
+                                <option value="Hyundai">Hyundai</option>
+                                <option value="Volkswagen">Volkswagen</option>
+                                <option value="BMW">BMW</option>
+                                <option value="Mercedes">Mercedes-Benz</option>
+                                <option value="Audi">Audi</option>
+                                <option value="Mazda">Mazda</option>
+                                <option value="Subaru">Subaru</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="modele-autre">Modèle</label>
+                            <select id="modele-autre" name="modele" required>
+                                <option value="">Choisir marque d'abord</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="annee-autre">Année</label>
+                            <select id="annee-autre" name="annee" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="trim-autre">Version (Trim)</label>
+                            <input type="text" id="trim-autre" name="trim" placeholder="Ex: LX, EX, Sport, Limited...">
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 2rem 0 1rem 0; color: #2c3e50;">Description du Problème</h3>
+                    
+                    <div class="form-group">
+                        <label for="probleme-autre">Décrivez le problème *</label>
+                        <textarea id="probleme-autre" name="probleme" rows="6" required placeholder="Décrivez en détail le problème mécanique, les symptômes observés, les bruits, quand cela se produit..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="photos-autre">Photos du problème</label>
+                        <div class="photo-upload" onclick="document.getElementById('file-input-autre').click()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragenter="handleDragEnter(event)" ondragleave="handleDragLeave(event)">
+                            <input type="file" id="file-input-autre" name="photos" multiple accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+                            <p>📷 Cliquez pour sélectionner des photos ou glissez-les ici</p>
+                            <p style="font-size: 14px; opacity: 0.7; margin-top: 10px;">JPG, PNG - Max 5MB par photo</p>
+                            <div id="photo-preview-autre" style="margin-top: 15px;"></div>
+                        </div>
+                    </div>
+
+                    <h3 style="margin: 2rem 0 1rem 0; color: #2c3e50;">Vos Informations</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nom-autre">Nom Complet *</label>
+                            <input type="text" id="nom-autre" name="nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telephone-autre">Téléphone *</label>
+                            <input type="tel" id="telephone-autre" name="telephone" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email-autre">Email</label>
+                            <input type="email" id="email-autre" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="ville-autre">Ville</label>
+                            <input type="text" id="ville-autre" name="ville" placeholder="Pour estimation déplacement">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="urgence-autre">Niveau d'urgence</label>
+                        <select id="urgence-autre" name="urgence">
+                            <option value="normal">Normal - Dans la semaine</option>
+                            <option value="urgent">Urgent - Dans 2-3 jours</option>
+                            <option value="tres-urgent">Très urgent - Aujourd'hui/demain</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        📞 Demander un Diagnostic Gratuit
+                    </button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <h3>FreinsExpress - Services Mécaniques à Domicile</h3>
+            <p>📱 (438) 814-4799 | ✉️ freinsexpress@gmail.com</p>
+            <p style="margin-top: 1rem; opacity: 0.8;">
+                Grand Montréal • Service rapide • Pièces de qualité
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Données des modèles par marque
+        const modelesByMarque = {
+            'Toyota': ['Camry', 'Corolla', 'RAV4', 'Prius', 'Highlander', 'Tacoma', 'Tundra', 'Sienna', 'Avalon', 'C-HR'],
+            'Honda': ['Civic', 'Accord', 'CR-V', 'Pilot', 'Fit', 'HR-V', 'Odyssey', 'Ridgeline', 'Passport', 'Insight'],
+            'Ford': ['F-150', 'Escape', 'Explorer', 'Mustang', 'Focus', 'Fusion', 'Edge', 'Expedition', 'Ranger', 'Transit'],
+            'Chevrolet': ['Silverado', 'Equinox', 'Malibu', 'Traverse', 'Tahoe', 'Suburban', 'Camaro', 'Cruze', 'Impala', 'Trax'],
+            'Nissan': ['Altima', 'Sentra', 'Rogue', 'Murano', 'Pathfinder', 'Titan', 'Versa', 'Maxima', '370Z', 'Armada'],
+            'Hyundai': ['Elantra', 'Sonata', 'Tucson', 'Santa Fe', 'Accent', 'Genesis', 'Veloster', 'Palisade', 'Kona', 'Venue'],
+            'Volkswagen': ['Jetta', 'Passat', 'Tiguan', 'Atlas', 'Golf', 'Beetle', 'Arteon', 'ID.4', 'Taos', 'Touareg'],
+            'BMW': ['3 Series', '5 Series', 'X3', 'X5', '7 Series', 'X1', 'X7', '4 Series', '2 Series', 'i3'],
+            'Mercedes': ['C-Class', 'E-Class', 'GLC', 'GLE', 'S-Class', 'GLA', 'GLS', 'A-Class', 'CLA', 'G-Class'],
+            'Audi': ['A4', 'A6', 'Q5', 'Q7', 'A3', 'Q3', 'A8', 'Q8', 'A5', 'e-tron'],
+            'Mazda': ['Mazda3', 'Mazda6', 'CX-5', 'CX-9', 'MX-5', 'CX-3', 'CX-30', 'Mazda2', 'CX-50', 'MX-30'],
+            'Subaru': ['Outback', 'Forester', 'Impreza', 'Legacy', 'Crosstrek', 'Ascent', 'WRX', 'BRZ', 'Tribeca', 'Baja']
+        };
+
+        // Navigation entre pages
+        function showPage(pageId) {
+            // Cacher toutes les pages
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Afficher la page sélectionnée
+            document.getElementById(pageId).classList.add('active');
+            
+            // Mettre à jour la navigation active
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            
+            // Trouver et activer le bon lien
+            const activeLink = document.querySelector(`[onclick*="${pageId}"]`);
+            if (activeLink) activeLink.classList.add('active');
+            
+            // Populer les années pour les formulaires
+            populateYears(pageId);
+        }
+
+        // Générer les années (2000 à 2024)
+        function populateYears(pageId) {
+            const yearSelect = document.getElementById(`annee-${pageId}`);
+            if (!yearSelect || yearSelect.children.length > 1) return;
+            
+            const currentYear = new Date().getFullYear();
+            
+            for (let year = currentYear; year >= 2000; year--) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearSelect.appendChild(option);
+            }
+        }
+
+        // Mettre à jour les modèles selon la marque
+        function updateModels(pageId) {
+            const marque = document.getElementById(`marque-${pageId}`).value;
+            const modeleSelect = document.getElementById(`modele-${pageId}`);
+            
+            // Vider les options existantes
+            modeleSelect.innerHTML = '<option value="">Sélectionner...</option>';
+            
+            if (marque && modelesByMarque[marque]) {
+                modelesByMarque[marque].forEach(modele => {
+                    const option = document.createElement('option');
+                    option.value = modele;
+                    option.textContent = modele;
+                    modeleSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Gestion des photos pour la section "Autre"
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            displayPhotos(files);
+        }
+
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            displayPhotos(files);
+        }
+
+        function displayPhotos(files) {
+            const preview = document.getElementById('photo-preview-autre');
+            preview.innerHTML = '';
+            
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const div = document.createElement('div');
+                    div.style.cssText = 'display: inline-block; margin: 5px; padding: 5px; background: #f0f0f0; border-radius: 5px;';
+                    div.textContent = `📎 ${file.name}`;
+                    preview.appendChild(div);
+                }
+            });
+        }
+
+        // Fonction pour toggle les options de scan
+        function toggleScanOption(optionId) {
+            const checkbox = document.getElementById(optionId);
+            const option = checkbox.closest('.scan-option');
+            
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked) {
+                option.classList.add('selected');
+            } else {
+                option.classList.remove('selected');
+            }
+        }
+
+        // Fonctions de soumission des formulaires
+        function submitFreinsForm(event) {
+            event.preventDefault();
+            submitForm(event, 'FREINS');
+        }
+
+        function submitAmortisseursForm(event) {
+            event.preventDefault();
+            submitForm(event, 'AMORTISSEURS');
+        }
+
+        function submitVidangeForm(event) {
+            event.preventDefault();
+            submitForm(event, 'VIDANGE');
+        }
+
+        function submitScanForm(event) {
+            event.preventDefault();
+            submitForm(event, 'SCAN DIAGNOSTIQUE');
+        }
+
+        function submitAutreForm(event) {
+            event.preventDefault();
+            submitForm(event, 'RÉPARATIONS DIVERSES');
+        }
+
+        // Fonction générique de soumission
+        function submitForm(event, serviceType) {
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData);
+            
+            // Validation spécifique selon le type de service
+            let isValid = true;
+            let message = '';
+            
+            if (serviceType === 'FREINS') {
+                const positions = Array.from(document.querySelectorAll('input[name="position"]:checked')).map(cb => cb.value);
+                const composants = Array.from(document.querySelectorAll('input[name="composants"]:checked')).map(cb => cb.value);
+                
+                if (positions.length === 0 || composants.length === 0) {
+                    alert('Veuillez sélectionner au moins une position et un composant.');
+                    return;
+                }
+                
+                message = `🚗 NOUVELLE DEMANDE - FreinsExpress
+
+SERVICE: ${serviceType}
+
+VÉHICULE:
+• Marque: ${data.marque}
+• Modèle: ${data.modele}
+• Année: ${data.annee}
+• Version: ${data.trim || 'Non spécifiée'}
+
+SERVICE DEMANDÉ:
+• Position: ${positions.join(', ')}
+• Composants: ${composants.join(', ')}
+
+CLIENT:
+• Nom: ${data.nom}
+• Téléphone: ${data.telephone}
+• Email: ${data.email || 'Non fourni'}
+• Ville: ${data.ville || 'Non spécifiée'}
+
+NOTES: ${data.notes || 'Aucune note'}`;
+                
+            } else if (serviceType === 'AMORTISSEURS') {
+                const positions = Array.from(document.querySelectorAll('input[name="position"]:checked')).map(cb => cb.value);
+                
+                if (positions.length === 0) {
+                    alert('Veuillez sélectionner au moins une position (avant ou arrière).');
+                    return;
+                }
+                
+                message = `🚗 NOUVELLE DEMANDE - FreinsExpress
+
+SERVICE: ${serviceType}
+
+VÉHICULE:
+• Marque: ${data.marque}
+• Modèle: ${data.modele}
+• Année: ${data.annee}
+• Version: ${data.trim || 'Non spécifiée'}
+
+SERVICE DEMANDÉ:
+• Position: ${positions.join(', ')}
+
+CLIENT:
+• Nom: ${data.nom}
+• Téléphone: ${data.telephone}
+• Email: ${data.email || 'Non fourni'}
+• Ville: ${data.ville || 'Non spécifiée'}
+
+NOTES: ${data.notes || 'Aucune note'}`;
+                
+            } else if (serviceType === 'VIDANGE') {
+                const services = Array.from(document.querySelectorAll('input[name="services"]:checked')).map(cb => cb.value);
+                
+                message = `🚗 NOUVELLE DEMANDE - FreinsExpress
+
+SERVICE: ${serviceType}
+
+VÉHICULE:
+• Marque: ${data.marque}
+• Modèle: ${data.modele}
+• Année: ${data.annee}
+• Version: ${data.trim || 'Non spécifiée'}
+• Moteur: ${data.moteur || 'Non spécifié'}
+• Kilométrage: ${data.kilometrage || 'Non spécifié'}
+
+SERVICES DEMANDÉS:
+• ${services.join(', ')}
+• Type d'huile: ${data['type-huile'] || 'Au choix du technicien'}
+
+CLIENT:
+• Nom: ${data.nom}
+• Téléphone: ${data.telephone}
+• Email: ${data.email || 'Non fourni'}
+• Ville: ${data.ville || 'Non spécifiée'}
+
+NOTES: ${data.notes || 'Aucune note'}`;
+                
+            } else if (serviceType === 'RÉPARATIONS DIVERSES') {
+                if (!data.probleme.trim()) {
+                    alert('Veuillez décrire le problème.');
+                    return;
+                }
+                
+                message = `🚗 NOUVELLE DEMANDE - FreinsExpress
+
+SERVICE: ${serviceType}
+
+VÉHICULE:
+• Marque: ${data.marque}
+• Modèle: ${data.modele}
+• Année: ${data.annee}
+• Version: ${data.trim || 'Non spécifiée'}
+
+PROBLÈME DÉCRIT:
+${data.probleme}
+
+URGENCE: ${data.urgence || 'Normal'}
+
+CLIENT:
+• Nom: ${data.nom}
+• Téléphone: ${data.telephone}
+• Email: ${data.email || 'Non fourni'}
+• Ville: ${data.ville || 'Non spécifiée'}
+
+PHOTOS: ${document.getElementById('file-input-autre').files.length > 0 ? 'Oui (' + document.getElementById('file-input-autre').files.length + ' fichiers)' : 'Aucune'}`;
+            }
+            
+            // Simuler l'envoi
+            alert(`Merci ${data.nom}! Votre demande de ${serviceType.toLowerCase()} a été reçue.\n\nNous vous contacterons au ${data.telephone} dans les plus brefs délais pour confirmer votre rendez-vous.`);
+            
+            console.log('Message généré:', message);
+        }
+
+        // Initialisation au chargement de la page
+        document.addEventListener('DOMContentLoaded', function() {
+            populateYears('freins');
+            populateYears('amortisseurs');
+            populateYears('vidange');
+            populateYears('scan');
+            populateYears('autre');
+        });
+    </script>
 </body>
 </html>

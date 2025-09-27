@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FreinsExpress - Services mécaniques à domicile au Québec. Freins, huile, amortisseurs et plus. Devis gratuit.">
+    <meta name="keywords" content="mécanique, freins, huile, amortisseurs, domicile, Québec, auto, réparation">
+    <title>FreinsExpress - Services Mécaniques à Domicile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            animation: slideInLeft 1s ease-out;
+        }
+        
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            animation: slideInRight 1s ease-out;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .nav-links a:hover {
+            color: #64b5f6;
+        }
+        
+        /* Pages */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out 0.9s both;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+            cursor: pointer;
+            border: none;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
+        }
+        
+        /* Services Section */
+        .services {
+            padding: 4rem 2rem;
+            background: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .service-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out;
+            cursor: pointer;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+        
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+        
+        .service-card p {
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+        
+        /* Image placeholder */
+        .service-image {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        /* Booking Form */
+        .booking {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+        }
+        
+        .booking-form {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.95);
+            padding: 3rem;
+            border-radius: 20px;
+            color: #333;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            animation: scaleIn 1s ease-out;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
+        }
+        
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .checkbox-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .checkbox-item input {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        /* Animations */
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: rotate(0deg) translate(-50%, -50%); }
+            50% { transform: rotate(180deg) translate(-50%, -50%); }
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .price-tag {
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+        
+        .back-button {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">🚗 FreinsExpress</div>
+            <ul class="nav-links">
+                <li><a onclick="showPage('accueil')">Accueil</a></li>
+                <li><a onclick="showPage('freins')">Freins</a></li>
+                <li><a onclick="showPage('huile')">Huile</a></li>
+                <li><a onclick="showPage('amortisseurs')">Amortisseurs</a></li>
+                <li><a onclick="showPage('autres')">Autres</a></li>
+                <li><a onclick="showPage('contact')">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- PAGE ACCUEIL -->
+    <div id="accueil" class="page active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Services Mécaniques à Domicile</h1>
+                <p>Expert en mécanique automobile • Service rapide et professionnel • Directement chez vous au Québec</p>
+                <button class="cta-button" onclick="showServices()">Nos Services</button>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="services">
+            <div class="container">
+                <h2 class="section-title">Nos Services</h2>
+                <div class="services-grid">
+                    <div class="service-card" onclick="showPage('freins')">
+                        <div class="service-image">Photo: Changement de freins</div>
+                        <div class="service-icon">🔧</div>
+                        <h3>Changement de Freins</h3>
+                        <p>Plaquettes, disques, inspection complète du système de freinage.</p>
+                        <div class="price-tag">À partir de 120$</div>
+                    </div>
+                    <div class="service-card" onclick="showPage('huile')">
+                        <div class="service-image">Photo: Changement d'huile</div>
+                        <div class="service-icon">🛢️</div>
+                        <h3>Changement d'Huile</h3>
+                        <p>Vidange complète, filtre à huile et filtre à air inclus.</p>
+                        <div class="price-tag">À partir de 80$</div>
+                    </div>
+                    <div class="service-card" onclick="showPage('amortisseurs')">
+                        <div class="service-image">Photo: Amortisseurs</div>
+                        <div class="service-icon">⚡</div>
+                        <h3>Changement d'Amortisseurs</h3>
+                        <p>Remplacement amortisseurs avant, arrière ou complet.</p>
+                        <div class="price-tag">À partir de 250$</div>
+                    </div>
+                    <div class="service-card" onclick="showPage('autres')">
+                        <div class="service-image">Photo: Réparations diverses</div>
+                        <div class="service-icon">🛠️</div>
+                        <h3>Autres Services</h3>
+                        <p>Diagnostic, réparations diverses, entretien général.</p>
+                        <div class="price-tag">Devis personnalisé</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE FREINS -->
+    <div id="freins" class="page">
+        <section class="booking">
+            <div class="container">
+                <button class="back-button" onclick="showPage('accueil')">← Retour</button>
+                <h2 class="section-title">Service de Freins</h2>
+                <form class="booking-form" name="freins-form" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="submitForm(event, 'freins')">
+                    <input type="hidden" name="form-name" value="freins-form" />
+                    <input type="hidden" name="bot-field" />
+                    <input type="hidden" name="service-type" value="Changement de freins" />
+                    
+                    <h3 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">🔧 Changement de Freins</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="freins-marque">Marque</label>
+                            <select id="freins-marque" name="marque" required onchange="updateModels('freins')">
+                                <option value="">Sélectionner...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="freins-modele">Modèle</label>
+                            <select id="freins-modele" name="modele" required>
+                                <option value="">Choisir marque d'abord</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="freins-annee">Année</label>
+                            <select id="freins-annee" name="annee" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="freins-trim">Version (Trim)</label>
+                            <input type="text" id="freins-trim" name="trim" placeholder="Ex: LX, EX, Sport...">
+                        </div>
+                    </div>
+
+                    <h4 style="margin: 2rem 0 1rem 0; color: #2c3e50;">Type de Service</h4>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="freins-avant" name="position" value="avant">
+                            <label for="freins-avant">Freins Avant</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="freins-arriere" name="position" value="arriere">
+                            <label for="freins-arriere">Freins Arrière</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="freins-plaquettes" name="composants" value="plaquettes">
+                            <label for="freins-plaquettes">Plaquettes</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="freins-disques" name="composants" value="disques">
+                            <label for="freins-disques">Disques</label>
+                        </div>
+                    </div>
+
+                    <h4 style="margin: 2rem 0 1rem 0; color: #2c3e50;">Vos Informations</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="freins-nom">Nom Complet *</label>
+                            <input type="text" id="freins-nom" name="nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="freins-telephone">Téléphone *</label>
+                            <input type="tel" id="freins-telephone" name="telephone" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="freins-email">Email</label>
+                            <input type="email" id="freins-email" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="freins-ville">Ville</label>
+                            <input type="text" id="freins-ville" name="ville" placeholder="Pour estimation déplacement">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="freins-notes">Symptômes / Notes</label>
+                        <textarea id="freins-notes" name="notes" rows="4" placeholder="Ex: Bruit au freinage, vibrations, pédale molle..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">📞 Demander un Devis - Freins</button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE HUILE -->
+    <div id="huile" class="page">
+        <section class="booking">
+            <div class="container">
+                <button class="back-button" onclick="showPage('accueil')">← Retour</button>
+                <h2 class="section-title">Changement d'Huile</h2>
+                <form class="booking-form" name="huile-form" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="submitForm(event, 'huile')">
+                    <input type="hidden" name="form-name" value="huile-form" />
+                    <input type="hidden" name="bot-field" />
+                    <input type="hidden" name="service-type" value="Changement d'huile" />
+                    
+                    <h3 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">🛢️ Service d'Huile Complet</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="huile-marque">Marque</label>
+                            <select id="huile-marque" name="marque" required onchange="updateModels('huile')">
+                                <option value="">Sélectionner...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="huile-modele">Modèle</label>
+                            <select id="huile-modele" name="modele" required>
+                                <option value="">Choisir marque d'abord</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="huile-annee">Année</label>
+                            <select id="huile-annee" name="annee" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="huile-trim">Version (Trim)</label>
+                            <input type="text" id="huile-trim" name="trim" placeholder="Ex: LX, EX, Sport...">
+                        </div>
+                    </div>
+
+                    <h4 style="margin: 2rem 0 1rem 0; color: #2c3e50;">Services Inclus</h4>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="huile-vidange" name="services" value="vidange" checked>
+                            <label for="huile-vidange">Vidange d'huile</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="huile-filtre-huile" name="services" value="filtre-huile" checked>
+                            <label for="huile-filtre-huile">Filtre à huile</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="huile-filtre-air" name="services" value="filtre-air">
+                            <label for="huile-filtre-air">Filtre à air</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="huile-inspection" name="services" value="inspection">
+                            <label for="huile-inspection">Inspection générale</label>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="huile-type">Type d'huile préféré</label>
+                            <select id="huile-type" name="type-huile">
+                                <option value="">À déterminer</option>
+                                <option value="conventionnelle">Conventionnelle</option>
+                                <option value="semi-synthetique">Semi-synthétique</option>
+                                <option value="synthetique">Synthétique complète</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="huile-km">Kilométrage actuel</label>
+                            <input type="number" id="huile-km" name="kilometrage" placeholder="Ex: 85000">
+                        </div>
+                    </div>
+
+                    <h4 style="margin: 2rem 0 1rem 0; color: #2c3e50;">Vos Informations</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="huile-nom">Nom Complet *</label>
+                            <input type="text" id="huile-nom" name="nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="huile-telephone">Téléphone *</label>
+                            <input type="tel" id="huile-telephone" name="telephone" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="huile-email">Email</label>
+                            <input type="email" id="huile-email" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="huile-ville">Ville</label>
+                            <input type="text" id="huile-ville" name="ville" placeholder="Pour estimation déplacement">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="huile-notes">Notes / Historique d'entretien</label>
+                        <textarea id="huile-notes" name="notes" rows="4" placeholder="Ex: Dernière vidange, type d'huile utilisé, problèmes remarqués..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">📞 Demander un Devis - Huile</button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE AMORTISSEURS -->
+    <div id="amortisseurs" class="page">
+        <section class="booking">
+            <div class="container">
+                <button class="back-button" onclick="showPage('accueil')">← Retour</button>
+                <h2 class="section-title">Changement d'Amortisseurs</h2>
+                <form class="booking-form" name="amortisseurs-form" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="submitForm(event, 'amortisseurs')">
+                    <input type="hidden" name="form-name" value="amortisseurs-form" />
+                    <input type="hidden" name="bot-field" />
+                    <input type="hidden" name="service-type" value="Changement d'amortisseurs" />
+                    
+                    <h3 style="text-align: center; margin-bottom: 2rem; color: #2c3e50;">⚡ Service d'Amortisseurs</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="amortisseurs-marque">Marque</label>
+                            <select id="amortisseurs-marque" name="marque" required onchange="updateModels('amortisseurs')">
+                                <option value="">Sélectionner...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="amortisseurs-modele">Modèle</label>
+                            <select id="amortisseurs-modele" name="modele" required>
+                                <option value="">Choisir marque d'abord</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="amortisseurs-annee">Année</label>
+                            <select id="amortisseurs-annee" name="annee" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="amortisseurs-trim">Version (Trim)</label>
+                            <input

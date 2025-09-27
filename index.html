@@ -71,6 +71,7 @@
         
         .page.active {
             display: block;
+            animation: fadeInUp 0.5s ease-out;
         }
         
         /* Hero Section */
@@ -410,12 +411,12 @@
         <nav class="nav">
             <div class="logo">🚗 FreinsExpress</div>
             <ul class="nav-links">
-                <li><a onclick="showPage('accueil')">Accueil</a></li>
-                <li><a onclick="showPage('freins')">Freins</a></li>
-                <li><a onclick="showPage('huile')">Huile</a></li>
-                <li><a onclick="showPage('amortisseurs')">Amortisseurs</a></li>
-                <li><a onclick="showPage('autres')">Autres</a></li>
-                <li><a onclick="showPage('contact')">Contact</a></li>
+                <li><a href="#" onclick="showPage('accueil'); return false;">Accueil</a></li>
+                <li><a href="#" onclick="showPage('freins'); return false;">Freins</a></li>
+                <li><a href="#" onclick="showPage('huile'); return false;">Huile</a></li>
+                <li><a href="#" onclick="showPage('amortisseurs'); return false;">Amortisseurs</a></li>
+                <li><a href="#" onclick="showPage('autres'); return false;">Autres</a></li>
+                <li><a href="#" onclick="showPage('contact'); return false;">Contact</a></li>
             </ul>
         </nav>
     </header>
@@ -436,28 +437,28 @@
             <div class="container">
                 <h2 class="section-title">Nos Services</h2>
                 <div class="services-grid">
-                    <div class="service-card" onclick="showPage('freins')">
+                    <div class="service-card" onclick="showPage('freins'); return false;">
                         <div class="service-image">Photo: Changement de freins</div>
                         <div class="service-icon">🔧</div>
                         <h3>Changement de Freins</h3>
                         <p>Plaquettes, disques, inspection complète du système de freinage.</p>
                         <div class="price-tag">À partir de 120$</div>
                     </div>
-                    <div class="service-card" onclick="showPage('huile')">
+                    <div class="service-card" onclick="showPage('huile'); return false;">
                         <div class="service-image">Photo: Changement d'huile</div>
                         <div class="service-icon">🛢️</div>
                         <h3>Changement d'Huile</h3>
                         <p>Vidange complète, filtre à huile et filtre à air inclus.</p>
                         <div class="price-tag">À partir de 80$</div>
                     </div>
-                    <div class="service-card" onclick="showPage('amortisseurs')">
+                    <div class="service-card" onclick="showPage('amortisseurs'); return false;">
                         <div class="service-image">Photo: Amortisseurs</div>
                         <div class="service-icon">⚡</div>
                         <h3>Changement d'Amortisseurs</h3>
                         <p>Remplacement amortisseurs avant, arrière ou complet.</p>
                         <div class="price-tag">À partir de 250$</div>
                     </div>
-                    <div class="service-card" onclick="showPage('autres')">
+                    <div class="service-card" onclick="showPage('autres'); return false;">
                         <div class="service-image">Photo: Réparations diverses</div>
                         <div class="service-icon">🛠️</div>
                         <h3>Autres Services</h3>
